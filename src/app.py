@@ -45,6 +45,22 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+
+@app.route('/characters', methods=['GET'])
+def get_characters():
+
+    json_text = jsonify(todos)
+    return json_text
+
+
+@app.route('/characters/<int:characters_id>', methods=['GET'])
+def get_single_character():
+
+    json_text = jsonify(todos)
+    return json_text
+
+
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
