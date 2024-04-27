@@ -111,13 +111,57 @@ def get_user_favorites(user_id):
     response_body['message'] = 'method GET favorites'
     return jsonify(response_body), 200
 
-@app.route('/user<int:user_id>/favorite/planets/<int:planets_id>', methods = ['POST'])
-def post_fav_planets_foruser(user_id, planets_id):
+@app.route('/user/<int:user_id>/favorites/planets/<int:planet_id>', methods = ['POST'])
+def post_fav_planets_foruser(user_id, planet_id):
     
-    response_body = {}
     user = User.query.get(user_id)
     if not user:
         return jsonify('user does not exist'), 400
+    planet = Planets.query.get(planet_id)
+    if not planet:
+        return jsonify('planet does not exist or other error idk'), 200
+    favorite = Favorites (user_id = user_id , planet_id = planet_id)
+    db.session.add(favorite)
+    db.session.commit()
+    response_body = {'msg':'planet added to favorites'}
+    return jsonify(response_body), 200
+
+@app.route('/user/<int:user_id>/favorites/characters/<int:character_id>', methods = ['POST'])
+def post_fav_character_foruser(user_id, character_id):
+    
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify('user does not exist'), 400
+    character = Characters.query.get(character_id)
+    if not character:
+        return jsonify('character does not exist or other error idk'), 200
+    favorite = Favorites (user_id = user_id , character_id = character_id)
+    db.session.add(favorite)
+    db.session.commit()
+    response_body = {'msg':'character added to favorites'}
+    return jsonify(response_body), 200
+
+
+@app.route('/user/<int:user_id>/favorites/planets/<int:planet_id>', methods = ['DELETE'])
+def delete_fav_planets_foruser(user_id, planet_id):
+    
+    favorite = Favorites.query.filter_by (user_id = user_id , planet_id = planet_id).first()
+    db.session.delete(favorite)
+    db.session.commit()
+    response_body = {'msg':'planet deleted from favorites'}
+    return jsonify(response_body), 200
+
+@app.route('/user/<int:user_id>/favorites/characters/<int:character_id>', methods = ['DELETE'])
+def delete_fav_characters_foruser(user_id, character_id):
+    
+    favorite = Favorites.query.filter_by (user_id = user_id , character_id = character_id).first()
+    db.session.delete(favorite)
+    db.session.commit()
+    response_body = {'msg':'character deleted from favorites'}
+    return jsonify(response_body), 200
+
+
+
     
 
 
