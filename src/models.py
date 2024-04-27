@@ -25,7 +25,7 @@ class User(db.Model):
 class Planets (db.Model):
     __table_name__='planets'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String, nullable=False)
     climate = db.Column(db.String(50), nullable=False)
     diameter = db.Column (db.String(20), nullable=False)
     planetDesc = db.Column (db.String(250), nullable=False)
@@ -86,15 +86,14 @@ class Characters (db.Model):
     
 
 
-class Favorite(db.Model):
+class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship(User)
     planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'))
     planet = db.relationship(Planets)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     character = db.relationship(Characters)
-    
 
     def __repr__(self):
         return '<Favorite %r>' % self.id

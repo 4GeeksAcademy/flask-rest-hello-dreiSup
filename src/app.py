@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Characters, Planets, Favorites
 #from models import Person
 
 app = Flask(__name__)
@@ -39,25 +39,62 @@ def sitemap():
 @app.route('/user', methods=['GET'])
 def handle_hello():
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+    response_body = {}
+    user = User.query.all()
+    response_body['results'] = [row.serialize() for row in user]
+    response_body['message'] = 'Method GET User'
+    return jsonify(response_body), 200
 
+@app.route('/planets', methods=['GET'])
+def get_planets():
+
+    response_body = {}
+    planets = Planets.query.all()
+    response_body['results'] = [row.serialize() for row in planets]
+    response_body['message'] = 'Method GET Planets'
+    return jsonify(response_body), 200
+
+@app.route('/planets/<int:planets_id>', methods=['GET'])
+def get_single_planet(planets_id):
+
+    response_body = {}
+    planet = Planets.query.get(planets_id)
+    if not planet:
+        return jsonify('planet does not exist'), 400
+    response_body['results'] = [planet.serialize()]
+    response_body['message'] = 'Method GET User'
     return jsonify(response_body), 200
 
 
 @app.route('/characters', methods=['GET'])
 def get_characters():
 
-    json_text = jsonify(todos)
-    return json_text
-
+    response_body = {}
+    characters = Characters.query.all()
+    response_body['results'] = [row.serialize() for row in characters]
+    response_body['message'] = 'Method GET Characters'
+    return jsonify(response_body), 200
 
 @app.route('/characters/<int:characters_id>', methods=['GET'])
-def get_single_character():
+def get_single_character(characters_id):
 
-    json_text = jsonify(todos)
-    return json_text
+    response_body = {}
+    character = Characters.query.get(characters_id)
+    if not character:
+        return jsonify('character does not exist'), 400
+    response_body['results'] = [character.serialize()]
+    response_body['message'] = 'Method GET User'
+    return jsonify(response_body), 200
+
+
+@app.route('/user/favorites', methods=['GET'])
+def get_user_favorites():
+
+    response_body = {}
+    favorites = Favorites.query.all()
+    response_body['results'] = [row.serialize() for row in favorites]
+    response_body['message'] = 'method GET favorites'
+    return jsonify(response_body), 200
 
 
 
