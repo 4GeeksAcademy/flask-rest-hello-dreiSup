@@ -36,8 +36,10 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+#get user
+
 @app.route('/user', methods=['GET'])
-def handle_hello():
+def handle_user():
 
     response_body = {}
     user = User.query.all()
@@ -45,6 +47,16 @@ def handle_hello():
     response_body['message'] = 'Method GET User'
     return jsonify(response_body), 200
 
+@app.route('/user/<int:user_id>', methods=['GET'])
+def handle_single_user(user_id):
+
+    response_body = {}
+    user = User.query.get(user_id)
+    response_body['results'] = [user.serialize()]
+    response_body['message'] = 'Method GET User'
+    return jsonify(response_body), 200
+
+#planets
 @app.route('/planets', methods=['GET'])
 def get_planets():
 
@@ -65,7 +77,7 @@ def get_single_planet(planets_id):
     response_body['message'] = 'Method GET User'
     return jsonify(response_body), 200
 
-
+#characters
 @app.route('/characters', methods=['GET'])
 def get_characters():
 
@@ -86,16 +98,27 @@ def get_single_character(characters_id):
     response_body['message'] = 'Method GET User'
     return jsonify(response_body), 200
 
-
-@app.route('/user/favorites', methods=['GET'])
-def get_user_favorites():
+#--------------------------- favorites -------------------------------
+@app.route('/user/<int:user_id>/favorites', methods=['GET'])
+def get_user_favorites(user_id):
 
     response_body = {}
-    favorites = Favorites.query.all()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify('user does not exist'), 400
+    favorites = Favorites.query.filter_by(user_id=user_id).all()
     response_body['results'] = [row.serialize() for row in favorites]
     response_body['message'] = 'method GET favorites'
     return jsonify(response_body), 200
 
+@app.route('/user<int:user_id>/favorite/planets/<int:planets_id>', methods = ['POST'])
+def post_fav_planets_foruser(user_id, planets_id):
+    
+    response_body = {}
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify('user does not exist'), 400
+    
 
 
 # this only runs if `$ python src/app.py` is executed
