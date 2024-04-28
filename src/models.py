@@ -26,15 +26,15 @@ class Planets (db.Model):
     __table_name__='planets'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    climate = db.Column(db.String(50), nullable=False)
-    diameter = db.Column (db.String(20), nullable=False)
-    planetDesc = db.Column (db.String(250), nullable=False)
-    rotation_period = db.Column (db.String(20), nullable=False)
-    orbital_period = db.Column (db.String(20), nullable=False)
-    gravity = db.Column (db.String(20), nullable=False)
-    population = db.Column (db.String(20), nullable=False)
-    terrain = db.Column (db.String(20), nullable=False)
-    surface_water = db.Column (db.String(20), nullable=False)
+    climate = db.Column(db.String, nullable=False)
+    diameter = db.Column (db.String, nullable=False)
+    planetDesc = db.Column (db.String, nullable=False)
+    rotation_period = db.Column (db.String, nullable=False)
+    orbital_period = db.Column (db.String, nullable=False)
+    gravity = db.Column (db.String, nullable=False)
+    population = db.Column (db.String, nullable=False)
+    terrain = db.Column (db.String, nullable=False)
+    surface_water = db.Column (db.String, nullable=False)
 
     def __repr__(self):
         return f'<Planet %r>' % self.name
@@ -67,6 +67,7 @@ class Characters (db.Model):
     gender= db.Column(db.String(20))
     hair_color= db.Column(db.String(20))
     skin_color= db.Column(db.String(20))
+
     def __repr__(self):
         return f'<Character %r>' % self.name
 
