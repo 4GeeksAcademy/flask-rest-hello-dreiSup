@@ -315,6 +315,15 @@ def delete_character(character_id):
     return jsonify({'message': 'Character deleted successfully'}), 200
 
 
+@app.route('/wipeall', methods=['GET'])
+def database_wipe():
+    try:
+        db.reflect()
+        db.drop_all()
+        db.session.commit()
+    except Exception as e:
+        return "mec", 500
+    return "ok", 200
 
 
 # this only runs if `$ python src/app.py` is executed
